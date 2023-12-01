@@ -1,0 +1,22 @@
+use super::utils::Result;
+
+fn solve(_lines: &Vec<&str>) -> i32 {
+    0
+}
+
+pub fn run(data: &str, check: bool) -> Result {
+    let s = data.to_string();
+    let lines: Vec<&str> = s.split('\n').filter(|s| s.len() > 0).collect();
+
+    let ans1 = solve(&lines);
+    println!("Part1: {}", ans1);
+
+    let ans2 = solve(&lines);
+    println!("Part2: {}", ans2);
+
+    if !check || (ans1 == 0 && ans2 == 0) {
+        Ok(())
+    } else {
+        Err(())
+    }
+}
