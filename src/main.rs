@@ -12,7 +12,7 @@ fn run_day(day: u8, path: String, check: bool) {
             let data = data.trim_end();
             let day_func = match day {
                 1 => aoc2023::day01::run,
-                // 2 => aoc2023::day02::run,
+                2 => aoc2023::day02::run,
                 // 3 => aoc2023::day03::run,
                 // 4 => aoc2023::day04::run,
                 // 5 => aoc2023::day05::run,
