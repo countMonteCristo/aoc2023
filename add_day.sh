@@ -11,6 +11,7 @@ DAY_MOD="${DAY_NAME}.rs"
 
 cp day.rs.template "src/${DAY_MOD}"
 touch "data/${DAY_NAME}.txt"
+touch "data_test/${DAY_NAME}_t1.txt"
 echo "pub mod ${DAY_NAME};" >> src/lib.rs
 
 what="// $DAY => aoc2023::$DAY_NAME::run,"
