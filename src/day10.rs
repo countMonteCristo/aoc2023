@@ -56,9 +56,9 @@ impl Maze {
     fn new(data: &str) -> Self {
         let lines = data
             .split('\n')
-            .filter(|s| s.len() > 0)
-            .map(|s| s.chars().collect::<Vec<char>>())
-            .collect::<Vec<Vec<char>>>();
+            .filter(|&s| !s.is_empty())
+            .map(|s| s.chars().collect())
+            .collect();
         let pipes = Pipe::create();
         let start = Self::get_start(&lines);
         let size = (lines[0].len() as I, lines.len() as I);
@@ -73,13 +73,13 @@ impl Maze {
                     0
                 }
             })
-            .collect::<Vec<I>>();
+            .collect::<Vec<_>>();
 
         let start_char = pipes
             .iter()
             .filter(|(_, v)| v.ends == start_ends)
             .map(|(&k, _)| k)
-            .collect::<Vec<char>>()[0];
+            .collect::<Vec<_>>()[0];
 
         Maze {
             data: lines,
@@ -114,7 +114,7 @@ impl Maze {
         loop {
             let cur_p = self.get_pipe(&cur);
             let next = (0..4)
-                .filter_map(|dir| {
+                .find_map(|dir| {
                     if let Some(next) = get_next(&cur, dir, &self.size) {
                         let p = self.get_pipe(&next);
                         if cur_p.connected(p, dir) {
@@ -125,7 +125,7 @@ impl Maze {
                     }
                     None
                 })
-                .next().unwrap();
+                .unwrap();
 
             path.push(next.clone());
             cur = next;

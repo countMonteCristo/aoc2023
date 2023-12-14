@@ -11,13 +11,11 @@ struct Node<'a> {
 
 impl<'a> Node<'a> {
     fn new(s: &'a str) -> Self {
-        let mut parts = s
-            .split(" = ");
+        let mut parts = s.split(" = ");
         let name = parts.next().unwrap();
         let choices = parts
             .next().unwrap()
-            .strip_prefix('(').unwrap()
-            .strip_suffix(')').unwrap()
+            .trim_matches(|c| c=='(' || c==')')
             .split(", ")
             .collect::<Vec<_>>();
         Node{name, l: choices[0], r:choices[1]}
@@ -32,7 +30,7 @@ fn parse_input<'a>(lines: &'a Vec<&'a str>) -> (&'a str, HashMap<&'a str, Node<'
             let node = Node::new(s);
             (node.name, node)
         })
-        .collect::<HashMap<&str, Node>>();
+        .collect();
 
     (lines[0], nodes)
 }
@@ -83,7 +81,7 @@ fn solve2(path: &str, nodes: &HashMap<&str, Node>) -> u64 {
 
 pub fn run(data: &str, check: bool) -> Result {
     let s = data.to_string();
-    let lines: Vec<&str> = s.split('\n').filter(|s| s.len() > 0).collect();
+    let lines: Vec<&str> = s.split('\n').filter(|&s| !s.is_empty()).collect();
 
     let (path, nodes) = parse_input(&lines);
 

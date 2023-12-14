@@ -14,7 +14,7 @@ impl Universe {
             .iter().enumerate()
             .filter(|(_, &s)| !s.contains('#'))
             .map(|(i, _)| i)
-            .collect::<Vec<usize>>();
+            .collect();
 
         let cols = (0..lines[0].len())
             .map(|i: usize| {
@@ -24,8 +24,8 @@ impl Universe {
                     .collect::<String>())
             })
             .filter(|(_, s)| !s.contains('#'))
-            .map(|(i, _)| i)
-            .collect::<Vec<usize>>();
+            .map(|t| t.0)
+            .collect();
 
         let mut galaxies = Vec::<Pos>::new();
         for (y, &l) in lines.iter().enumerate() {
@@ -69,7 +69,7 @@ fn solve(universe: &Universe, m: usize) -> usize {
 
 pub fn run(data: &str, check: bool) -> Result {
     let s = data.to_string();
-    let lines: Vec<&str> = s.split('\n').filter(|s| s.len() > 0).collect();
+    let lines: Vec<&str> = s.split('\n').filter(|&s| !s.is_empty()).collect();
     let universe = Universe::new(&lines);
 
     let ans1 = solve(&universe, 2);

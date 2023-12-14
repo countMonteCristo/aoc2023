@@ -47,7 +47,7 @@ impl<'a> Hand<'a> {
             counts_j = counts.clone();
         }
 
-        Hand{cards: p[0], counts, bid: p[1].parse::<u64>().unwrap(), counts_j}
+        Hand{cards: p[0], counts, bid: p[1].parse().unwrap(), counts_j}
     }
 }
 
@@ -138,8 +138,7 @@ fn get_rank(h: &Hand, cmp: &HandComaprator) -> u8 {
         .iter()
         .map(|f| f(cmp.get_counts(h)))
         .filter(|&x| x > 0)
-        .collect::<Vec<_>>()
-        .first().unwrap().to_owned()
+        .next().unwrap().to_owned()
 }
 
 fn solve(hands: & mut Vec<Hand>, cmp: &HandComaprator) -> u64 {
@@ -151,8 +150,7 @@ fn solve(hands: & mut Vec<Hand>, cmp: &HandComaprator) -> u64 {
         });
 
     hands
-        .iter()
-        .enumerate()
+        .iter().enumerate()
         .map(|(i, h)| h.bid * (i as u64 + 1))
         .sum()
 }
@@ -160,12 +158,12 @@ fn solve(hands: & mut Vec<Hand>, cmp: &HandComaprator) -> u64 {
 
 pub fn run(data: &str, check: bool) -> Result {
     let s = data.to_string();
-    let lines: Vec<&str> = s.split('\n').filter(|s| s.len() > 0).collect();
+    let lines: Vec<&str> = s.split('\n').filter(|&s| !s.is_empty()).collect();
 
     let mut hands = lines
         .iter()
         .map(|&s| Hand::new(s))
-        .collect::<Vec<_>>();
+        .collect();
 
     let cmp1 = HandComaprator{
         cards: vec!['A', 'K', 'Q', 'J', 'T', '9', '8', '7', '6', '5', '4', '3', '2'],

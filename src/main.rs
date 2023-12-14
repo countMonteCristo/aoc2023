@@ -5,7 +5,7 @@ use std::fs;
 use aoc2023::utils::Result;
 
 
-fn run_day(day: u8, path: String, check: bool) {
+fn run_day(day: u8, path: String, check: bool) -> Result {
     let input = fs::read_to_string(&path);
     let res = match input {
         Ok(data) => {
@@ -46,9 +46,12 @@ fn run_day(day: u8, path: String, check: bool) {
     };
 
     match res {
-        Ok(_) => {},
-        Err(_) => println!("ERROR: wrong answer at day {}", day),
-    };
+        Ok(_) => {Ok(())},
+        Err(_) => {
+            println!("ERROR: wrong answer at day {}", day);
+            Err(())
+        },
+    }
 }
 
 fn main() -> Result {
@@ -62,11 +65,21 @@ fn main() -> Result {
                 .expect("Expected days count but got nothing")
                 .parse()
                 .expect("Expected days count as a number");
+            let mut nerr = 0;
             for day in 1..=count {
                 println!("Day {}:", day);
                 let path = format!("./data/day{:02}.txt", day);
-                run_day(day, path, true);
+                let day_result = run_day(day, path, true);
+                if day_result.is_err() {
+                    nerr += 1;
+                }
                 println!();
+            }
+            println!("==============================");
+            if nerr > 0 {
+                println!("ERRORS: {}", nerr);
+            } else {
+                println!("OK");
             }
         }
         "check" => {    // check all days or specified ones
@@ -77,7 +90,7 @@ fn main() -> Result {
             for day in days {
                 println!("Day {}:", day);
                 let path = format!("./data/day{:02}.txt", day);
-                run_day(day, path, true);
+                let _ = run_day(day, path, true);
                 println!();
             }
         },
@@ -87,7 +100,7 @@ fn main() -> Result {
                 .parse()
                 .expect("Expected day number as a number");
             let path = args.pop_front().expect("Expected day faile path but got nothing");
-            run_day(day, path, false);
+            let _ = run_day(day, path, false);
         },
         _ => panic!("Unknown command: {}. Supported commands: run|check|test", cmd)
     }

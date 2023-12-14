@@ -7,27 +7,6 @@ struct Range {
     size: u64,
 }
 
-fn map_rng(r: &Range, map: &Map) -> Vec<Range> {
-    let mut res = Vec::<Range>::new();
-    let mut cr = r.clone();
-
-    for rm in map.iter() {
-        if let Some(i) = cr.intersect(&rm.from) {
-            if i.start != r.start {
-                res.push(Range{start: cr.start, size: i.start-cr.start});
-            }
-            res.push(rm.map(&i));
-            let s = cr.start.clone();
-            cr.start = i.start + i.size;
-            cr.size = cr.size - (cr.start - s);
-        }
-    }
-    if cr.size > 0 {
-        res.push(cr);
-    }
-
-    res
-}
 
 impl Range {
     fn intersect(&self, r: &Range) -> Option<Range> {
@@ -39,6 +18,29 @@ impl Range {
         let end = (self.start + self.size - 1).min(r.start + r.size - 1);
         Some(Range{start, size: end-start+1})
     }
+
+    fn map_rng(&self, map: &Map) -> Vec<Range> {
+        let mut res = Vec::<Range>::new();
+        let mut cr = self.clone();
+
+        for rm in map.iter() {
+            if let Some(i) = cr.intersect(&rm.from) {
+                if i.start != self.start {
+                    res.push(Range{start: cr.start, size: i.start-cr.start});
+                }
+                res.push(rm.map(&i));
+                let s = cr.start.clone();
+                cr.start = i.start + i.size;
+                cr.size = cr.size - (cr.start - s);
+            }
+        }
+        if cr.size > 0 {
+            res.push(cr);
+        }
+
+        res
+    }
+
 }
 
 
@@ -82,7 +84,7 @@ impl Almanac {
 
         for &l in lines.iter() {
             if l.len() == 0 {
-                if ranges.len() > 0 {
+                if !ranges.is_empty() {
                     let mut copy = ranges.clone();
                     copy.sort_by(|a, b| {
                         a.from.start.cmp(&b.from.start)
@@ -94,12 +96,11 @@ impl Almanac {
             }
             if l.starts_with("seeds:") {
                 raw_seeds = l
-                    .split(':')
-                    .collect::<Vec<&str>>()[1]
-                    .trim()
+                    .split(": ")
+                    .last().unwrap()
                     .split(' ')
-                    .map(|x| x.parse::<u64>().unwrap())
-                    .collect::<Vec<u64>>();
+                    .map(|x| x.parse().unwrap())
+                    .collect();
                 continue;
             }
             if l.ends_with("map:") {
@@ -110,8 +111,8 @@ impl Almanac {
                 RangeMap::new(
                     l
                     .split(' ')
-                    .map(|x| x.parse::<u64>().unwrap())
-                    .collect::<Vec<u64>>()
+                    .map(|x| x.parse().unwrap())
+                    .collect()
                 )
             );
         }
@@ -127,30 +128,28 @@ fn solve(seeds: &Vec<Range>, a: &Almanac) -> u64 {
     for m in a.maps.iter() {
         cur = cur
             .iter()
-            .map(|r| map_rng(r, m))
+            .map(|r| r.map_rng(m))
             .flatten()
-            .collect::<Vec<Range>>();
+            .collect::<Vec<_>>();
     }
 
     cur.iter().map(|r| r.start).min().unwrap()
 }
 
 fn solve1(a: &Almanac) -> u64 {
-    let seeds = a
-        .raw_seeds
+    let seeds = a.raw_seeds
         .iter()
         .map(|&v| Range{start: v, size: 1})
-        .collect::<Vec<_>>();
+        .collect();
 
     solve(&seeds, a)
 }
 
 fn solve2(a: &Almanac) -> u64 {
-    let seeds = a
-        .raw_seeds
+    let seeds = a.raw_seeds
         .chunks(2)
         .map(|v| Range{start: v[0], size: v[1]})
-        .collect::<Vec<_>>();
+        .collect();
 
     solve(&seeds, a)
 }

@@ -13,14 +13,14 @@ impl Pattern {
         let line = format!(".{}", vec![parts[0]; n].join("?").trim_end_matches('.'));
         let groups = parts[1]
             .split(',')
-            .map(|s| s.parse::<usize>().unwrap())
+            .map(|s| s.parse().unwrap())
             .collect::<Vec<_>>()
             .repeat(n);
 
         Self{line, groups}
     }
 
-    fn fast(&self) -> usize {
+    fn count(&self) -> usize {
         let mut dp = vec![0; self.line.len()+1];
         dp[0] = 1;
         for (i, _) in self.line.chars().take_while(|&c| c != '#').enumerate() {
@@ -56,15 +56,14 @@ impl Pattern {
 fn solve(lines: &Vec<&str>, n: usize) -> usize {
     lines
         .iter()
-        .map(|&line| Pattern::new(line, n))
-        .map(|p| p.fast())
+        .map(|&line| Pattern::new(line, n).count())
         .sum()
 }
 
 
 pub fn run(data: &str, check: bool) -> Result {
     let s = data.to_string();
-    let lines: Vec<&str> = s.split('\n').filter(|s| s.len() > 0).collect();
+    let lines: Vec<&str> = s.split('\n').filter(|&s| !s.is_empty()).collect();
 
     let ans1 = solve(&lines, 1);
     println!("Part1: {}", ans1);

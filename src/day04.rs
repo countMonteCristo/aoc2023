@@ -14,7 +14,7 @@ fn get_cards(lines: &Vec<&str>) -> Vec<Card> {
     lines
         .iter()
         .map(|&m| {
-            let parts = m.split(':').collect::<Vec<&str>>();
+            let parts = m.split(':').collect::<Vec<_>>();
             let id = parts[0].split(' ').last().unwrap().parse::<u32>().unwrap() - 1;
             (id, parts[1])
         })
@@ -22,14 +22,14 @@ fn get_cards(lines: &Vec<&str>) -> Vec<Card> {
             (id, l
                 .split('|')
                 .map(|s|
-                    HashSet::<i32>::from_iter(s
+                    HashSet::<N>::from_iter(s
                         .trim()
                         .split(' ')
-                        .filter(|x| x.len() > 0)
-                        .map(|x| x.parse::<N>().unwrap())
+                        .filter(|&x| !x.is_empty())
+                        .map(|x| x.parse().unwrap())
                     )
                 )
-                .collect::<Vec<HashSet<i32>>>())
+                .collect::<Vec<HashSet<_>>>())
         )
         .map(|(id, v)| {
             let n = v[0].intersection(&v[1]).count() as u32;
@@ -61,7 +61,7 @@ fn solve2(cards: &Vec<Card>) -> u32 {
 
 pub fn run(data: &str, check: bool) -> Result {
     let s = data.to_string();
-    let lines: Vec<&str> = s.split('\n').filter(|s| s.len() > 0).collect();
+    let lines: Vec<&str> = s.split('\n').filter(|&s| !s.is_empty()).collect();
     let cards = get_cards(&lines);
 
     let ans1 = solve1(&cards);
