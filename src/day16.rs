@@ -67,7 +67,7 @@ impl Cell {
     }
 }
 
-fn solve(table: &Vec<Vec<char>>, start: Cell) -> usize {
+fn count_energized(table: &Vec<Vec<char>>, start: Cell) -> usize {
     let mut h = HashSet::<Cell>::new();
     let mut q = VecDeque::<Cell>::new();
 
@@ -89,30 +89,23 @@ fn solve(table: &Vec<Vec<char>>, start: Cell) -> usize {
 }
 
 fn solve1(table: &Vec<Vec<char>>) -> usize {
-    solve(table, Cell{
-        p: Pos{x: 0, y: 0},
-        d: &RIGHT,
-    })
+    count_energized(table, Cell{p: Pos{x: 0, y: 0}, d: &RIGHT})
 }
 
 fn solve2(table: &Vec<Vec<char>>) -> usize {
     let mut res = 0;
+    let h = table.len()    as i32;
+    let w = table[0].len() as i32;
 
-    for c in 0..table[0].len()-1 {
-        res = res.max(solve(table, Cell {
-            p: Pos{x: c as i32, y: 0}, d: &DOWN
-        }));
-        res = res.max(solve(table, Cell {
-            p: Pos{x: c as i32, y: (table.len()-1) as i32}, d: &UP
-        }));
+    for c in 0..w-1 {
+        res = res
+            .max(count_energized(table, Cell {p: Pos{x: c, y:   0}, d: &DOWN}))
+            .max(count_energized(table, Cell {p: Pos{x: c, y: h-1}, d: &UP}));
     }
-    for r in 0..table.len()-1 {
-        res = res.max(solve(table, Cell {
-            p: Pos{x: 0, y: r as i32}, d: &LEFT
-        }));
-        res = res.max(solve(table, Cell {
-            p: Pos{x: (table[0].len()-1) as i32, y: r as i32}, d: &RIGHT
-        }));
+    for r in 0..h-1 {
+        res = res
+            .max(count_energized(table, Cell {p: Pos{x: 0,   y: r}, d: &LEFT}))
+            .max(count_energized(table, Cell {p: Pos{x: w-1, y: r}, d: &RIGHT}));
     }
 
     res
