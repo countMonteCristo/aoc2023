@@ -1,5 +1,7 @@
 use super::utils::Result;
 
+use super::utils::Point;
+
 
 const HASH_MOD: usize = 256;
 const HASH_P: usize = 17;
@@ -84,6 +86,10 @@ pub fn run(data: &str, check: bool) -> Result {
 
     let ans2 = solve2(&data);
     println!("Part2: {}", ans2);
+
+    let p = Point::new(2,3);
+    let q = p.mul(5);
+    println!("{p:?} {q:?}");
 
     if !check || (ans1 == 517965 && ans2 == 267372) {
         Ok(())

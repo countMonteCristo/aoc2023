@@ -9,7 +9,7 @@ impl CubeSet {
         let mut v: Vec<u64> = vec![0, 0, 0];
         for str_set in s.split(", ") {
             let desc = str_set.split(' ').collect::<Vec<_>>();
-            let count: u64 = desc[0].parse().expect("Can nnot parse cube count");
+            let count: u64 = desc[0].parse().expect("Can not parse cube count");
             let color = desc[1];
             let id = match color {
                 "red" =>   0,

@@ -17,29 +17,30 @@ impl Pattern {
         Self{field, w, h}
     }
 
+    fn count_diff<T: std::cmp::PartialEq>(i1: impl Iterator<Item=T>, i2: impl Iterator<Item=T>) -> usize {
+        i1.zip(i2).filter(|(e1, e2)| e1 != e2).count()
+    }
+
+    fn row_iter(&self, r: usize) -> impl Iterator<Item=&char> + '_ {
+        self.field[r].iter()
+    }
+    fn col_iter(&self, c: usize) -> impl Iterator<Item=&char> + '_ {
+        self.field.iter().map(move |l| l.iter().nth(c).unwrap())
+    }
+
     fn rows_diff(&self, r1: usize, r2: usize) -> usize {
-        self.field[r1]
-            .iter()
-            .zip(self.field[r2].iter())
-            .filter(|(&c1, &c2)| c1 != c2 )
-            .count()
+        Self::count_diff(self.row_iter(r1), self.row_iter(r2))
     }
 
     fn cols_diff(&self, c1: usize, c2: usize) -> usize {
-        let mut res = 0;
-        for r in 0..self.h {
-            if self.field[r][c1] != self.field[r][c2] {
-                res += 1;
-            }
-        }
-        res
+        Self::count_diff(self.col_iter(c1), self.col_iter(c2))
     }
 
-    fn is_reflected(&self, x: usize, max: usize, edge: usize, f: fn(&Self, usize, usize)->usize) -> bool {
+    fn is_reflected(&self, x: usize, max: usize, edge: usize, count_diff: fn(&Self, usize, usize)->usize) -> bool {
         let mut n = 0;
         for d in 0..=x {
             if x+1+d >= edge { break; }
-            n += f(self, x-d, x+1+d);
+            n += count_diff(self, x-d, x+1+d);
             if n > max {
                 return false;
             }
