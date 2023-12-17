@@ -47,7 +47,7 @@ impl<T: New> Table<T> {
 */
 
 
-#[derive(Debug, PartialEq, Eq, Hash,Clone)]
+#[derive(Debug, PartialEq, Eq, Hash,Clone, Copy)]
 pub struct Point<T> {
     pub x: T,
     pub y: T,
