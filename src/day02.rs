@@ -6,7 +6,7 @@ struct CubeSet {
 
 impl CubeSet {
     fn new(s: &str) -> Self {
-        let mut v: Vec<u64> = vec![0, 0, 0];
+        let mut v: Vec<u64> = vec![0; 3];
         for str_set in s.split(", ") {
             let desc = str_set.split(' ').collect::<Vec<_>>();
             let count: u64 = desc[0].parse().expect("Can not parse cube count");
@@ -43,7 +43,7 @@ impl Game {
     }
 
     fn get_power_set(&self, _: &CubeSet) -> u64 {
-        (0..=2)
+        (0..3)
             .map(|id| self.max_per_game(id))
             .product()
     }
@@ -57,11 +57,7 @@ impl Game {
     }
 
     fn is_game_possible(&self, s: &CubeSet) -> u64 {
-        if (0..=2).all(|id| self.max_per_game(id) <= s.v[id]) {
-            self.id
-        } else {
-            0
-        }
+        if (0..3).all(|id| self.max_per_game(id) <= s.v[id]) { self.id } else { 0 }
     }
 }
 

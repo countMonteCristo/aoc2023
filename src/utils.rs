@@ -1,53 +1,6 @@
 pub type Result = std::result::Result<(), ()>;
 
-/*
-pub struct Table<T> {
-    data: Vec<Vec<T>>,
-}
-
-
-pub trait New {
-    fn new(s: &str) -> Self;
-}
-
-impl New for char {
-    fn new(s: &str) -> Self { s.chars().nth(0).unwrap() }
-}
-
-
-impl<T: New> Table<T> {
-    pub fn new(s: &Vec<&str>,) -> Self {
-        let data = s
-            .iter()
-            .map(|&r|
-                r.split(' ').map(|x| T::new(x)).collect::<Vec<_>>()
-            )
-            .collect::<Vec<_>>();
-
-        Self { data }
-    }
-
-    pub fn row_iter(&self, row: usize) -> impl Iterator<Item=&T> {
-        self.data[row].iter()
-    }
-
-    pub fn col_iter(&self, col: usize) -> impl Iterator<Item=&T> {
-        self.data.iter().map(move |v| v.iter().nth(col).unwrap())
-    }
-
-    pub fn w(&self) -> usize {
-        self.data[0].len()
-    }
-
-    pub fn h(&self) -> usize {
-        self.data.len()
-    }
-}
-
-*/
-
-
-#[derive(Debug, PartialEq, Eq, Hash,Clone, Copy)]
+#[derive(Debug, PartialEq, Eq, Hash,Clone, Copy, Default)]
 pub struct Point<T> {
     pub x: T,
     pub y: T,
@@ -101,5 +54,4 @@ impl<T:
     pub fn euclidian(&self) -> T {
         self.x * self.x + self.y * self.y
     }
-
 }

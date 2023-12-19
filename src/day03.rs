@@ -23,7 +23,7 @@ fn get_symbols(lines: &Vec<&str>) -> Symbols {
     let mut gs: Symbols = HashMap::new();
 
     for (y, &line) in lines.iter().enumerate() {
-        let mut x: usize = 0;
+        let mut x = 0;
         while x < line.len() {
             let c = line.chars().nth(x).unwrap();
             if c.is_digit(10) {
@@ -32,16 +32,13 @@ fn get_symbols(lines: &Vec<&str>) -> Symbols {
                     cur += 1;
                 }
 
-                let number: u64 = line[x..cur].parse().expect("Can not parse number");
+                let number = line[x..cur].parse().expect("Can not parse number");
                 let n = Number{x, y, value: number};
 
                 for ty in (y as i32)-1..=(y as i32)+1 {
-                    if ty < 0 {
-                        continue;
-                    }
-                    if ty >= lines.len() as i32 {
-                        break;
-                    }
+                    if ty < 0 { continue; }
+                    if ty >= lines.len() as i32 { break; }
+                    
                     let &l = lines.iter().nth(ty as usize).unwrap();
                     for tx in (x as i32)-1..=(cur as i32) {
                         if tx >= 0 && tx < l.len() as i32 {

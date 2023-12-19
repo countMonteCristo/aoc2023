@@ -1,38 +1,19 @@
 use std::collections::HashMap;
 
-use super::utils::Result;
+use super::utils::{Result, Point};
 
-type U = usize;
 type I = i32;
-
-struct Pos {
-    row: U,
-    col: U,
-}
-
-struct Diff {
-    dr: I,
-    dc: I,
-}
-
-impl Pos {
-    fn add(&self, d: &Diff) -> Self {
-        Self{
-            row: (self.row as I + d.dr) as U,
-            col: (self.col as I + d.dc) as U,
-        }
-    }
-}
+type Pos = Point<I>;
+type Diff = Point<I>;
 
 const ROCK: char = 'O';
 const EMPTY: char = '.';
 
-
 #[derive(Clone)]
 struct Platform {
     table: Vec<Vec<char>>,
-    w: U,
-    h: U,
+    w: I,
+    h: I,
 }
 
 impl Platform {
@@ -41,8 +22,8 @@ impl Platform {
             .iter()
             .map(|&s| s.chars().collect::<Vec<_>>())
             .collect::<Vec<_>>();
-        let w = table[0].len();
-        let h = table.len();
+        let w = table[0].len() as I;
+        let h = table.len() as I;
 
         Self{table, w, h}
     }
@@ -53,51 +34,51 @@ impl Platform {
 
     fn move_if_can(&mut self, from: &mut Pos, d: &Diff) -> bool {
         let to = from.add(d);
-        let can = self.table[from.row][from.col] == ROCK && self.table[to.row][to.col] == EMPTY;
+        let can = self.table[from.y as usize][from.x as usize] == ROCK && self.table[to.y as usize][to.x as usize] == EMPTY;
         if can {
-            self.table[from.row][from.col] = EMPTY;
-            self.table[to.row][to.col] = ROCK;
+            self.table[from.y as usize][from.x as usize] = EMPTY;
+            self.table[to.y as usize][to.x as usize] = ROCK;
             *from = to;
         }
         can
     }
 
     fn tilt_north(&mut self) {
-        let d = Diff{dr: -1, dc: 0};
+        let d = Diff{y: -1, x: 0};
         for row in 1..self.h {
             for col in 0..self.w {
-                let mut p = Pos{row, col};
-                while p.row > 0 && self.move_if_can(&mut p, &d) {}
+                let mut p = Pos{y: row, x: col};
+                while p.y > 0 && self.move_if_can(&mut p, &d) {}
             }
         }
     }
 
     fn tilt_south(&mut self) {
-        let d = Diff{dr: 1, dc: 0};
+        let d = Diff{y: 1, x: 0};
         for row in (0..self.h).rev() {
             for col in 0..self.w {
-                let mut p = Pos{row, col};
-                while p.row < self.h - 1 && self.move_if_can(&mut p, &d) {}
+                let mut p = Pos{y: row, x: col};
+                while p.y < self.h - 1 && self.move_if_can(&mut p, &d) {}
             }
         }
     }
 
     fn tilt_west(&mut self) {
-        let d = Diff{dr: 0, dc: -1};
+        let d = Diff{y: 0, x: -1};
         for col in 1..self.w {
             for row in 0..self.h {
-                let mut p = Pos{row, col};
-                while p.col > 0 && self.move_if_can(&mut p, &d) {}
+                let mut p = Pos{y: row, x: col};
+                while p.x > 0 && self.move_if_can(&mut p, &d) {}
             }
         }
     }
 
     fn tilt_east(&mut self) {
-        let d = Diff{dr: 0, dc: 1};
+        let d = Diff{y: 0, x: 1};
         for col in (0..self.w).rev() {
             for row in 0..self.h {
-                let mut p = Pos{row, col};
-                while p.col < self.w - 1 && self.move_if_can(&mut p, &d) {}
+                let mut p = Pos{y: row, x: col};
+                while p.x < self.w - 1 && self.move_if_can(&mut p, &d) {}
             }
         }
     }
@@ -109,7 +90,7 @@ impl Platform {
     fn calc_load(&self) -> usize {
         self.table
             .iter().enumerate()
-            .map(|(i, l)| (self.h - i) * l.iter().filter(|&&c| c == 'O').count())
+            .map(|(i, l)| (self.h as usize - i) * l.iter().filter(|&&c| c == 'O').count())
             .sum()
     }
 

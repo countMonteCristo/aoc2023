@@ -29,7 +29,7 @@ fn run_day(day: u8, path: String, check: bool) -> Result {
                 16 => aoc2023::day16::run,
                 17 => aoc2023::day17::run,
                 18 => aoc2023::day18::run,
-                // 19 => aoc2023::day19::run,
+                19 => aoc2023::day19::run,
                 // 20 => aoc2023::day20::run,
                 // 21 => aoc2023::day21::run,
                 // 22 => aoc2023::day22::run,

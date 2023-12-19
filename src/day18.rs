@@ -44,19 +44,17 @@ impl Move {
 
 fn solve(moves: &Vec<Move>) -> N {
     let mut edge = Vec::<Pos>::new();
-    let mut cur = Pos{x: 0, y: 0};
-    moves
-        .iter()
-        .for_each(|m| {
-            edge.push(cur.clone());
-            cur.iadd(&m.d.mul(m.n));
-        });
+    let mut cur = Pos::default();
+    moves.iter().for_each(|m| {
+        edge.push(cur.clone());
+        cur.iadd(&m.d.mul(m.n));
+    });
 
     let s = edge
         .iter().enumerate()
         .map(|(i, e)| {
-            let ni = (i + 1) % edge.len();
-            e.x * edge[ni].y -e.y * edge[ni].x
+            let ne = &edge[(i + 1) % edge.len()];
+            e.x * ne.y - e.y * ne.x
         })
         .sum::<N>()
         .abs() / 2;
