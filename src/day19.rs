@@ -61,25 +61,25 @@ impl Rule {
             let c= r.chars().nth(0).unwrap();
             let op = r.chars().nth(1).unwrap();
             let v = r[2..].parse().unwrap();
-
             let to = parts.next().unwrap().to_string();
-            Self{c, op, v, to }
+
+            Self{c, op, v, to}
         } else {
-            Self{to: s.to_string(), c: '\0', op: '\0', v: 0}
+            Self{to: s.to_string(), c: 'x', op: '\0', v: 0}
         }
     }
     fn apply(&self, p: &Xmas) -> Option<&String> {
+        let v = *p.d.get(&self.c).unwrap();
         let ok = match self.op {
-            '>' => p.d.get(&self.c).unwrap() > &self.v,
-            '<' => p.d.get(&self.c).unwrap() < &self.v,
+            '>' => v > self.v,
+            '<' => v < self.v,
             _ => true,
         };
-
         if ok { Some(&self.to) } else { None }
     }
 
     fn from_str(s: &str) -> (String, Vec<Self>) {
-        let mut parts = s.trim_matches('}').split("{");
+        let mut parts = s.trim_matches('}').split('{');
         let name = parts.next().unwrap().to_string();
         let rules_str = parts.next().unwrap();
 
@@ -106,11 +106,7 @@ impl Rule {
         let iter = pr
             .iter()
             .map(|(&k, r)| {
-                if k == self.c {
-                    (k, r.split(self))
-                } else {
-                    (k, (Some(r.clone()), Some(r.clone())))
-                }
+                if k == self.c { (k, r.split(self)) } else { (k, (Some(r.clone()), Some(r.clone()))) }
             });
         (
             Self::collect_ranges(iter.clone().map(|(k, (r1, _))| (k, r1))),
@@ -121,22 +117,20 @@ impl Rule {
 
 type Workflows = HashMap<String, Vec<Rule>>;
 
-fn apply_rules(pr: &XmasRanges, rules: &Vec<Rule>) -> Vec<(String, XmasRanges)> {
+fn apply_rules(mut ranges: XmasRanges, rules: &Vec<Rule>) -> Vec<(String, XmasRanges)> {
     let mut res = Vec::new();
 
-    let mut cpr = pr.clone();
     for rule in rules.iter() {
-        let (matched, nxt) = rule.split_ranges(&cpr);
+        let (matched, tail) = rule.split_ranges(&ranges);
         if let Some(matched) = matched {
             res.push((rule.to.clone(), matched));
         }
-        if let Some(next) = nxt {
-            cpr = next;
+        if let Some(tail) = tail {
+            ranges = tail;
         } else {
             break;
         }
     }
-
     res
 }
 
@@ -175,15 +169,15 @@ fn solve2(workflows: &Workflows, min: u64, max: u64) -> u64 {
     let mut pool = vec![("in".to_string(), start)];
     let mut res = 0;
     while !pool.is_empty() {
-        let (next, pr) = pool.pop().unwrap();
+        let (name, pr) = pool.pop().unwrap();
 
-        if next.as_str() == "A" {
+        if name.as_str() == "A" {
             res += pr.values().map(|r| r.len()).product::<u64>();
             continue;
         }
-        if next.as_str() == "R" { continue; }
+        if name.as_str() == "R" { continue; }
 
-        pool.extend(apply_rules(&pr, &workflows.get(&next).unwrap()));
+        pool.extend(apply_rules(pr, &workflows.get(&name).unwrap()));
     }
     res
 }
