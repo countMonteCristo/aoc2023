@@ -1,6 +1,6 @@
 use std::collections::HashMap;
 
-use super::utils::Result;
+use super::utils::{Result, lcm};
 
 #[derive(Debug)]
 struct Node<'a> {
@@ -50,20 +50,6 @@ fn count(path: &str, nodes: &HashMap<&str, Node>, start: &str, is_end: fn(&str)-
     n
 }
 
-fn gcd(x: u64, y: u64) -> u64 {
-    let mut n1 = x.max(y);
-    let mut n2 = x.min(y);
-
-    loop {
-        let r = n1 % n2;
-        if r == 0 { return n2; }
-        (n1, n2) = (n2, r);
-    }
-}
-
-fn lcm(x: u64, y: u64) -> u64 {
-    (x * y) / gcd(x, y)
-}
 
 fn solve1(path: &str, nodes: &HashMap<&str, Node>) -> u64 {
     count(path, &nodes, "AAA", |n| n == "ZZZ")

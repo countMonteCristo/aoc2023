@@ -1,0 +1,16 @@
+broadcaster -> vd
+%vd -> dt, ks
+%ks -> qf
+%qf -> dt, dv
+%dv -> hm
+%hm -> cr
+%cr -> kq, dt
+%kq -> hd
+%hd -> ps
+%ps -> kc, dt
+%kc -> dt, gf
+%gf -> dt, qb
+%qb -> dt
+&dt -> vd, dv, dh, hm, ks, hd, kq
+&dh -> rm
+&rm -> rx

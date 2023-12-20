@@ -55,3 +55,19 @@ impl<T:
         self.x * self.x + self.y * self.y
     }
 }
+
+
+pub fn gcd(x: u64, y: u64) -> u64 {
+    let mut n1 = x.max(y);
+    let mut n2 = x.min(y);
+
+    loop {
+        let r = n1 % n2;
+        if r == 0 { return n2; }
+        (n1, n2) = (n2, r);
+    }
+}
+
+pub fn lcm(x: u64, y: u64) -> u64 {
+    (x * y) / gcd(x, y)
+}

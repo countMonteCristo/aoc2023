@@ -1,0 +1,16 @@
+broadcaster -> mg
+%mg -> dz, gr
+%dz -> fd, gr
+%fd -> mx
+%mx -> xd, gr
+%xd -> xg, gr
+%xg -> qn, gr
+%qn -> pc
+%pc -> tq, gr
+%tq -> fh, gr
+%fh -> dm, gr
+%dm -> nf, gr
+%nf -> gr
+&gr -> dp, mg, fd, qn
+&dp -> rm
+&rm -> rx
