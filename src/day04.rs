@@ -60,8 +60,7 @@ fn solve2(cards: &Vec<Card>) -> u32 {
 }
 
 pub fn run(data: &str, check: bool) -> Result {
-    let s = data.to_string();
-    let lines: Vec<&str> = s.split('\n').filter(|&s| !s.is_empty()).collect();
+    let lines = data.split('\n').collect();
     let cards = get_cards(&lines);
 
     let ans1 = solve1(&cards);

@@ -36,7 +36,7 @@ fn solve(lines: &Vec<&str>, digits: Vec<(&str, i32)>) -> i32 {
 }
 
 pub fn run(data: &str, check: bool) -> Result {
-    let lines: Vec<&str> = data.split('\n').filter(|&s| !s.is_empty()).collect();
+    let lines = data.split('\n').collect();
 
     let ans1 = solve(&lines, vec![
         ("1", 1), ("2", 2), ("3", 3), ("4", 4), ("5", 5), ("6", 6), ("7", 7), ("8", 8), ("9", 9), ("0", 0),

@@ -46,12 +46,9 @@ fn solve(nums: &Vec<Vec<I>>, get: fn(&Vec<Vec<I>>)->I) -> I {
 }
 
 pub fn run(data: &str, check: bool) -> Result {
-    let s = data.to_string();
-    let lines: Vec<&str> = s.split('\n').filter(|&s| !s.is_empty()).collect();
-
-    let nums = lines
-        .iter()
-        .map(|&s| s.split(' ').map(|n| n.parse().unwrap()).collect())
+    let nums = data
+        .split('\n')
+        .map(|s| s.split(' ').map(|n| n.parse().unwrap()).collect())
         .collect();
 
     let ans1 = solve(&nums, get_next);

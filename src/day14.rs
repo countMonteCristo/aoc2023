@@ -137,8 +137,7 @@ fn solve2(p: &mut Platform) -> usize {
 }
 
 pub fn run(data: &str, check: bool) -> Result {
-    let s = data.to_string();
-    let lines: Vec<&str> = s.split('\n').filter(|&s| !s.is_empty()).collect();
+    let lines = data.split('\n').collect();
     let platform = Platform::new(&lines);
 
     let ans1 = solve1(&mut platform.clone());

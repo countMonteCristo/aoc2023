@@ -123,8 +123,7 @@ fn solve(table: &Vec<Vec<N>>, minn: usize, maxn: usize) -> N {
 }
 
 pub fn run(data: &str, check: bool) -> Result {
-    let s = data.to_string();
-    let table = s
+    let table = data
         .split('\n')
         .map(|s|
             s.chars().map(|c| c.to_digit(10).unwrap() as N).collect()

@@ -38,7 +38,7 @@ fn get_symbols(lines: &Vec<&str>) -> Symbols {
                 for ty in (y as i32)-1..=(y as i32)+1 {
                     if ty < 0 { continue; }
                     if ty >= lines.len() as i32 { break; }
-                    
+
                     let &l = lines.iter().nth(ty as usize).unwrap();
                     for tx in (x as i32)-1..=(cur as i32) {
                         if tx >= 0 && tx < l.len() as i32 {
@@ -81,8 +81,7 @@ fn solve2(symbols: &Symbols) -> u64 {
 
 
 pub fn run(data: &str, check: bool) -> Result {
-    let s = data.to_string();
-    let lines: Vec<&str> = s.split('\n').filter(|&s| !s.is_empty()).collect();
+    let lines = data.split('\n').collect();
     let symbols = get_symbols(&lines);
 
     let ans1 = solve1(&symbols);

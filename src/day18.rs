@@ -63,8 +63,7 @@ fn solve(moves: &Vec<Move>) -> N {
 }
 
 pub fn run(data: &str, check: bool) -> Result {
-    let s = data.to_string();
-    let moves = s.split('\n').map(|s| Move::new(s)).collect();
+    let moves = data.split('\n').map(|s| Move::new(s)).collect();
 
     let ans1 = solve(&moves);
     println!("Part1: {}", ans1);

@@ -66,8 +66,7 @@ fn solve(games: &Vec<Game>, s: &CubeSet, f: fn(&Game, &CubeSet)->u64) -> u64 {
 }
 
 pub fn run(data: &str, check: bool) -> Result {
-    let s = data.to_string();
-    let lines: Vec<&str> = s.split('\n').filter(|&s| !s.is_empty()).collect();
+    let lines = data.split('\n').collect::<Vec<_>>();
     let games = lines
         .iter()
         .map(|&l| Game::new(l))

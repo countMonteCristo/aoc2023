@@ -157,12 +157,9 @@ fn solve(hands: & mut Vec<Hand>, cmp: &HandComaprator) -> u64 {
 
 
 pub fn run(data: &str, check: bool) -> Result {
-    let s = data.to_string();
-    let lines: Vec<&str> = s.split('\n').filter(|&s| !s.is_empty()).collect();
-
-    let mut hands = lines
-        .iter()
-        .map(|&s| Hand::new(s))
+    let mut hands = data
+        .split('\n')
+        .map(|s| Hand::new(s))
         .collect();
 
     let cmp1 = HandComaprator{

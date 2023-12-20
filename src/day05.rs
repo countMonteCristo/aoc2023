@@ -156,8 +156,7 @@ fn solve2(a: &Almanac) -> u64 {
 
 
 pub fn run(data: &str, check: bool) -> Result {
-    let s = data.to_string();
-    let lines: Vec<&str> = s.split('\n').collect();
+    let lines = data.split('\n').collect();
     let almanac = Almanac::new(&lines);
 
     let ans1 = solve1(&almanac);

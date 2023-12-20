@@ -112,8 +112,7 @@ fn solve2(table: &Vec<Vec<char>>) -> usize {
 }
 
 pub fn run(data: &str, check: bool) -> Result {
-    let s = data.to_string();
-    let table = s.split('\n').map(|s| s.chars().collect()).collect();
+    let table = data.split('\n').map(|s| s.chars().collect()).collect();
 
     let ans1 = solve1(&table);
     println!("Part1: {}", ans1);

@@ -68,8 +68,7 @@ fn solve(universe: &Universe, m: usize) -> usize {
 }
 
 pub fn run(data: &str, check: bool) -> Result {
-    let s = data.to_string();
-    let lines: Vec<&str> = s.split('\n').filter(|&s| !s.is_empty()).collect();
+    let lines = data.split('\n').collect();
     let universe = Universe::new(&lines);
 
     let ans1 = solve(&universe, 2);

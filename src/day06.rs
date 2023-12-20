@@ -49,8 +49,7 @@ fn solve2(lines: &Vec<&str>) -> u64 {
 }
 
 pub fn run(data: &str, check: bool) -> Result {
-    let s = data.to_string();
-    let lines: Vec<&str> = s.split('\n').filter(|&s| !s.is_empty()).collect();
+    let lines = data.split('\n').collect();
 
     let ans1 = solve1(&lines);
     println!("Part1: {}", ans1);
