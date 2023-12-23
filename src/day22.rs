@@ -21,18 +21,17 @@ impl Pos {
 struct Brick {
     p1: Pos,
     p2: Pos,
-    id: usize,
     above: HashSet<usize>,
     below: HashSet<usize>,
 }
 
 impl Brick {
-    fn new(s: &str, id: usize) -> Self {
+    fn new(s: &str) -> Self {
         let mut parts = s.split("~");
         let first = parts.next().unwrap().split(",").map(|t| t.parse::<U>().unwrap());
         let second = parts.next().unwrap().split(",").map(|t| t.parse::<U>().unwrap());
 
-        Self{p1: Pos::new(first), p2: Pos::new(second), id, above: HashSet::new(), below: HashSet::new()}
+        Self{p1: Pos::new(first), p2: Pos::new(second), above: HashSet::new(), below: HashSet::new()}
     }
 
     fn prepare(&mut self, h: &HashMap<Pos, usize>) {
@@ -40,7 +39,7 @@ impl Brick {
         self.below = self.below_ids(h);
     }
 
-    fn drop(&mut self, h: &mut HashMap<Pos, usize>) {
+    fn drop(&mut self, h: &mut HashMap<Pos, usize>, id: &usize) {
         while self.p1.z > 1 {
             let mut stop = false;
 
@@ -64,7 +63,7 @@ impl Brick {
             for y in self.p1.y..=self.p2.y {
                 for z in self.p1.z..=self.p2.z {
                     let p = Pos{x,y,z};
-                    h.insert(p, self.id);
+                    h.insert(p, id.clone());
                 }
             }
         }
@@ -114,7 +113,7 @@ impl Brick {
 fn prepare(lines: &Vec<&str>) -> (HashMap<usize, Brick>, Vec<usize>, HashMap::<Pos, usize>) {
     let mut bricks = lines
         .iter().enumerate()
-        .map(|(id, &s)| (id, Brick::new(s, id)))
+        .map(|(id, &s)| (id, Brick::new(s/* , id */)))
         .collect::<HashMap<usize, Brick>>();
 
     let mut sorted_ids  = bricks
@@ -131,7 +130,7 @@ fn prepare(lines: &Vec<&str>) -> (HashMap<usize, Brick>, Vec<usize>, HashMap::<P
 
     sorted_ids
         .iter()
-        .for_each(|id| bricks.get_mut(id).unwrap().drop(&mut h));
+        .for_each(|id| bricks.get_mut(id).unwrap().drop(&mut h, id));
 
     sorted_ids
         .iter()
