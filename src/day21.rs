@@ -64,16 +64,8 @@ fn solve1(field: &Vec<Vec<char>>, n: usize) -> usize {
     count_steps(&field, &get_start(field), available1, n)[n-1]
 }
 
-// f(xi) = a*xi*xi + b*xi + c = vi
-// xi = h//2 + (i-1)*h
-// f(x) = ?
-fn quad(h: f64, v1: f64, v2: f64, v3: f64, x: f64) -> usize {
-    let hh2 = 2. * h * h;
-    let half = (h - 1.) / 2.;
-    let a = (v3 - 2.*v2 + v1) / hh2;
-    let b = ((v2 - v1)*(4.*h-1.) - (v3 - v2)*(2.*h-1.))/ hh2;
-    let c = v1 - a * half * half - b * half;
-    (a*x*x + b*x + c).round() as usize
+fn quad(v1: usize, v2: usize, v3: usize, n: usize) -> usize {
+    v1*(n-1)*(n-2)/2 - v2*n*(n-2) + v3*n*(n-1)/2
 }
 
 fn solve2(field: &Vec<Vec<char>>, n: usize) -> usize {
@@ -84,7 +76,8 @@ fn solve2(field: &Vec<Vec<char>>, n: usize) -> usize {
     let maxn = 2*h + half;
 
     let res = count_steps(&field, &start, available2, maxn);
-    quad(h as f64, res[half-1] as f64, res[half-1+h] as f64, res[half-1+2*h] as f64, n as f64)
+
+    quad(res[half-1], res[half-1+h], res[half-1+2*h], (n-half)/h)
 }
 
 pub fn run(data: &str, check: bool) -> Result {
