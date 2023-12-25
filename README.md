@@ -1,5 +1,5 @@
-# aoc2022
-[Advent of Code 2023](https://adventofcode.com/2023) solved (probably) in Rust
+# aoc2023
+[Advent of Code 2023](https://adventofcode.com/2023) solved in Rust
 
 Usage
 -----
@@ -31,3 +31,7 @@ Run single day with custom file as an input:
 ```bash
 cargo run --release test 13 path/to/custom/file.txt
 ```
+
+Note
+-----
+Solutions for some parts (day 23 part 2 and day 25 part 1) are extremely unefficient, but actually return correct result. Uncomment solution code if you want to get results for certain inputs.
