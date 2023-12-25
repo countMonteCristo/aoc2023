@@ -35,7 +35,7 @@ fn run_day(day: u8, path: String, check: bool) -> Result {
                 22 => aoc2023::day22::run,
                 23 => aoc2023::day23::run,
                 24 => aoc2023::day24::run,
-                // 25 => aoc2023::day25::run,
+                25 => aoc2023::day25::run,
                 _ => unreachable!(),
             };
             day_func(data, check)
